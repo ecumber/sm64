@@ -403,10 +403,15 @@ s32 act_start_hanging(struct MarioState *m) {
         return set_mario_action(m, ACT_GROUND_POUND, 0);
     }
 
+    // FIXED
     //! Crash if Mario's referenced ceiling is NULL (same for other hanging actions)
-    if (m->ceil->type != SURFACE_HANGABLE) {
-        return set_mario_action(m, ACT_FREEFALL, 0);
+    if (m->ceil != NULL) 
+    {
+        if (m->ceil->type != SURFACE_HANGABLE) {
+            return set_mario_action(m, ACT_FREEFALL, 0);
+        }
     }
+
 
     set_mario_animation(m, MARIO_ANIM_HANG_ON_CEILING);
     play_sound_if_no_flag(m, SOUND_ACTION_HANGING_STEP, MARIO_ACTION_SOUND_PLAYED);

@@ -534,6 +534,10 @@ void painting_update_floors(struct Painting *painting) {
     \* and sets a bitfield accordingly.                                               */
 
     // check if Mario's current floor is one of the special floors
+
+    //if (gPaintingMarioFloorType == NULL)
+    //    return;
+
     if (gPaintingMarioFloorType == paintingId * 3 + SURFACE_PAINTING_WOBBLE_A6) {
         rippleLeft = RIPPLE_LEFT;
     }

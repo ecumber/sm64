@@ -383,6 +383,9 @@ void update_shell_speed(struct MarioState *m) {
     if (m->forwardVel > 64.0f) {
         m->forwardVel = 64.0f;
     }
+    if (m->forwardVel < -64.0f) {
+        m->forwardVel = -64.0f;
+    }
 
     m->faceAngle[1] =
         m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x800, 0x800);

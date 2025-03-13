@@ -67,10 +67,16 @@ void breakable_box_small_released_loop(void) {
         }
     }
 
+    // cork box is ungrabbable 5 frames before despawn to prevent cloning
+    if (o->oBreakableBoxSmallFramesSinceReleased > 895) {
+        o->oInteractionSubtype = INT_SUBTYPE_NOT_GRABBABLE;
+    }
+
     // Despawn, and create a corkbox respawner
     if (o->oBreakableBoxSmallFramesSinceReleased > 900) {
         create_respawner(MODEL_BREAKABLE_BOX_SMALL, bhvBreakableBoxSmall, 3000);
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+        o->oInteractionSubtype = 0;
     }
 }
 
