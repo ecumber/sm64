@@ -413,12 +413,12 @@ u32 common_air_action_step(struct MarioState *m, u32 landAction, s32 animation, 
                     // not able to ledge grab it.
                     if (m->forwardVel >= 38.0f) {
                         m->particleFlags |= PARTICLE_VERTICAL_STAR;
-                        set_mario_action(m, ACT_BACKWARD_AIR_KB, 0);
+                        drop_and_set_mario_action(m, ACT_BACKWARD_AIR_KB, 0);
                     } else {
                         if (m->forwardVel > 8.0f) {
                             mario_set_forward_vel(m, -8.0f);
                         }
-                        return set_mario_action(m, ACT_SOFT_BONK, 0);
+                        return drop_and_set_mario_action(m, ACT_SOFT_BONK, 0);
                     }
                 }
             } else {

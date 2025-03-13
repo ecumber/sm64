@@ -53,9 +53,9 @@ void bhv_big_bully_init(void) {
 
 void bully_check_mario_collision(void) {
     if (
-#if defined(VERSION_SH) || defined(VERSION_CN)
+//#if defined(VERSION_SH) || defined(VERSION_CN)
     o->oAction != BULLY_ACT_LAVA_DEATH && o->oAction != BULLY_ACT_DEATH_PLANE_DEATH &&
-#endif
+//#endif
     o->oInteractStatus & INT_STATUS_INTERACTED) {
         if (o->oBhvParams2ndByte == BULLY_BP_SIZE_SMALL) {
             cur_obj_play_sound_2(SOUND_OBJ2_BULLY_ATTACKED);
@@ -130,7 +130,7 @@ void bully_act_back_up(void) {
     //  conditions are activated. However because its angle is set to its facing angle,
     //  it will walk forward instead of backing up.
 
-    if (o->oTimer == 15) {
+    if (o->oTimer >= 15) {
         o->oMoveAngleYaw = o->oFaceAngleYaw;
         o->oFlags |= OBJ_FLAG_SET_FACE_YAW_TO_MOVE_YAW;
         o->oAction = BULLY_ACT_PATROL;
@@ -338,6 +338,7 @@ void bhv_big_bully_with_minions_loop(void) {
             //  be reduced by 3 frames (16.67%) on the first hit.
             if (o->oBullyKBTimerAndMinionKOCounter == 3) {
                 play_puzzle_jingle();
+                o->oBullyKBTimerAndMinionKOCounter = 0;
 
                 if (o->oTimer > 90) {
                     o->oAction = BULLY_ACT_ACTIVATE_AND_FALL;

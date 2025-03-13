@@ -28,6 +28,7 @@ void bobomb_spawn_coin(void) {
 }
 
 void bobomb_act_explode(void) {
+    o->oInteractionSubtype = INT_SUBTYPE_NOT_GRABBABLE;
     if (o->oTimer < 5) {
         cur_obj_scale(1.0 + (f32) o->oTimer / 5.0);
     } else {
@@ -36,6 +37,7 @@ void bobomb_act_explode(void) {
 
         bobomb_spawn_coin();
         create_respawner(MODEL_BLACK_BOBOMB, bhvBobomb, 3000);
+        o->oInteractionSubtype = INT_SUBTYPE_KICKABLE;
 
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }

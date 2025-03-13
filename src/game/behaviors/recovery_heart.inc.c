@@ -20,7 +20,10 @@ void bhv_recovery_heart_loop(void) {
             o->oSpinningHeartPlayedSound++;
         }
 
-        o->oAngleVelYaw = (s32)(200.0f * gMarioStates[0].forwardVel) + 1000;
+        if (gMarioStates[0].forwardVel > 10700000.0f) // approximately how much speed is needed to overflow oAngleVelYaw, rounded down
+            o->oAngleVelYaw = (s32)(200.0f * 10700000.0f) + 1000;
+        else 
+            o->oAngleVelYaw = (s32)(200.0f * gMarioStates[0].forwardVel) + 1000;
     } else {
         o->oSpinningHeartPlayedSound = 0;
 

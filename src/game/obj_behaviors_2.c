@@ -491,6 +491,11 @@ static s32 obj_grow_then_shrink(f32 *scaleVel, f32 shootFireScale, f32 endScale)
     if (o->oTimer < 2) {
         o->header.gfx.scale[0] += *scaleVel;
 
+        if (*scaleVel < -0.03f)
+        {
+            *scaleVel = -0.03f;
+        }
+
         if ((*scaleVel -= 0.01f) > -0.03f) {
             o->oTimer = 0;
         }

@@ -779,6 +779,11 @@ static s32 check_water_grab(struct MarioState *m) {
         f32 dx = object->oPosX - m->pos[0];
         f32 dz = object->oPosZ - m->pos[2];
         s16 dAngleToObject = atan2s(dz, dx) - m->faceAngle[1];
+        // ido doesn't like it if this statement is before the angle calculation
+        if (object->oInteractionSubtype == INT_SUBTYPE_NOT_GRABBABLE)
+        {
+            return FALSE;
+        }
 
         if (dAngleToObject >= -0x2AAA && dAngleToObject <= 0x2AAA) {
             m->usedObj = object;
