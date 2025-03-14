@@ -214,12 +214,11 @@ s32 act_dive_picking_up(struct MarioState *m) {
     if (m->input & INPUT_STOMPED) {
         return drop_and_set_mario_action(m, ACT_SHOCKWAVE_BOUNCE, 0);
     }
-
-    //! Hands-free holding. Landing on a slope or being pushed off a ledge while
+    // FIXED ! Hands-free holding. Landing on a slope or being pushed off a ledge while
     // landing from a dive grab sets Mario's action to a non-holding action
     // without dropping the object, causing the hands-free holding glitch.
     if (m->input & INPUT_OFF_FLOOR) {
-        return set_mario_action(m, ACT_FREEFALL, 0);
+        return drop_and_set_mario_action(m, ACT_FREEFALL, 0);
     }
 
     if (m->input & INPUT_ABOVE_SLIDE) {

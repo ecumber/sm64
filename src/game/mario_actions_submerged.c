@@ -771,20 +771,23 @@ static s32 act_water_shell_swimming(struct MarioState *m) {
 }
 
 static s32 check_water_grab(struct MarioState *m) {
-    //! Heave hos have the grabbable interaction type but are not normally
+    // FIXED ! Heave hos have the grabbable interaction type but are not normally
     // grabbable. Since water grabbing doesn't check the appropriate input flag,
     // you can use water grab to pick up heave ho.
+
+    f32 dx;
+    f32 dz;
+    s16 dAngleToObject;
+
     if (m->marioObj->collidedObjInteractTypes & INTERACT_GRABBABLE) {
         struct Object *object = mario_get_collided_object(m, INTERACT_GRABBABLE);
-        f32 dx = object->oPosX - m->pos[0];
-        f32 dz = object->oPosZ - m->pos[2];
-        s16 dAngleToObject = atan2s(dz, dx) - m->faceAngle[1];
-        // ido doesn't like it if this statement is before the angle calculation
-        if (object->oInteractionSubtype == INT_SUBTYPE_NOT_GRABBABLE)
+        if ( (object->oInteractionSubtype == INT_SUBTYPE_NOT_GRABBABLE) || ( object->oInteractionSubtype == INT_SUBTYPE_GRABS_MARIO) )
         {
             return FALSE;
         }
-
+        dx = object->oPosX - m->pos[0];
+        dz = object->oPosZ - m->pos[2];
+        dAngleToObject = atan2s(dz, dx) - m->faceAngle[1];
         if (dAngleToObject >= -0x2AAA && dAngleToObject <= 0x2AAA) {
             m->usedObj = object;
             mario_grab_used_object(m);
@@ -1507,11 +1510,11 @@ static s32 check_common_submerged_cancels(struct MarioState *m) {
         if (m->waterLevel - 80 > m->floorHeight) {
             m->pos[1] = m->waterLevel - 80;
         } else {
-            //! If you press B to throw the shell, there is a ~5 frame window
+            // FIXED ! If you press B to throw the shell, there is a ~5 frame window
             // where your held object is the shell, but you are not in the
             // water shell swimming action. This allows you to hold the water
             // shell on land (used for cloning in DDD).
-            if (m->action == ACT_WATER_SHELL_SWIMMING && m->heldObj != NULL) {
+            if (((m->action == ACT_WATER_SHELL_SWIMMING) || (m->action == ACT_WATER_THROW)) && m->heldObj != NULL) {
                 m->heldObj->oInteractStatus = INT_STATUS_STOP_RIDING;
                 m->heldObj = NULL;
                 stop_shell_music();

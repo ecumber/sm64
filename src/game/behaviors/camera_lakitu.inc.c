@@ -26,7 +26,7 @@ void bhv_camera_lakitu_init(void) {
  * the spawn cloud action.
  */
 static void camera_lakitu_intro_act_trigger_cutscene(void) {
-    //! These bounds are slightly smaller than the actual bridge bounds, allowing
+    // FIXED ! These bounds are slightly smaller than the actual bridge bounds, allowing
     //  the RTA speedrunning method of lakitu skip
     if (gMarioObject->oPosX > -554.0f && gMarioObject->oPosX < 555.0f
         && gMarioObject->oPosY > 800.0f && gMarioObject->oPosZ > -2000.0f

@@ -378,8 +378,7 @@ void update_shell_speed(struct MarioState *m) {
     } else if (m->floor->normal.y >= 0.95f) {
         m->forwardVel -= 1.0f;
     }
-
-    //! No backward speed cap (shell hyperspeed)
+    // FIXED ! No backward speed cap (shell hyperspeed)
     if (m->forwardVel > 64.0f) {
         m->forwardVel = 64.0f;
     }
@@ -541,7 +540,9 @@ void anim_and_audio_for_walk(struct MarioState *m) {
                     if (val04 > 8.0f) {
                         m->actionTimer = 2;
                     } else {
-                        //! (Speed Crash) If Mario's speed is more than 2^17.
+                        //FIXED ! (Speed Crash) If Mario's speed is more than 2^17.
+                        if (val04 > 131071.0f)
+                            val04 = 131071.0f;
                         if ((val14 = (s32)(val04 / 4.0f * 0x10000)) < 0x1000) {
                             val14 = 0x1000;
                         }
@@ -559,7 +560,9 @@ void anim_and_audio_for_walk(struct MarioState *m) {
                     if (val04 > 8.0f) {
                         m->actionTimer = 2;
                     } else {
-                        //! (Speed Crash) If Mario's speed is more than 2^17.
+                        // FIXED ! (Speed Crash) If Mario's speed is more than 2^15.
+                        if (val04 > 32767.0f)
+                            val04 = 32767.0f;
                         if ((val14 = (s32)(val04 * 0x10000)) < 0x1000) {
                             val14 = 0x1000;
                         }
@@ -576,7 +579,9 @@ void anim_and_audio_for_walk(struct MarioState *m) {
                     } else if (val04 > 22.0f) {
                         m->actionTimer = 3;
                     } else {
-                        //! (Speed Crash) If Mario's speed is more than 2^17.
+                        // FIXED ! (Speed Crash) If Mario's speed is more than 2^17.
+                        if (val04 > 131071.0f)
+                            val04 = 131071.0f;
                         val14 = (s32)(val04 / 4.0f * 0x10000);
                         set_mario_anim_with_accel(m, MARIO_ANIM_WALKING, val14);
                         play_step_sound(m, 10, 49);
@@ -589,7 +594,9 @@ void anim_and_audio_for_walk(struct MarioState *m) {
                     if (val04 < 18.0f) {
                         m->actionTimer = 2;
                     } else {
-                        //! (Speed Crash) If Mario's speed is more than 2^17.
+                        // FIXED ! (Speed Crash) If Mario's speed is more than 2^17.
+                        if (val04 > 131071.0f)
+                            val04 = 131071.0f;
                         val14 = (s32)(val04 / 4.0f * 0x10000);
                         set_mario_anim_with_accel(m, MARIO_ANIM_RUNNING, val14);
                         play_step_sound(m, 9, 45);
@@ -624,7 +631,9 @@ void anim_and_audio_for_hold_walk(struct MarioState *m) {
                 if (val04 > 6.0f) {
                     m->actionTimer = 1;
                 } else {
-                    //! (Speed Crash) Crashes if Mario's speed exceeds or equals 2^15.
+                    // FIXED ! (Speed Crash) Crashes if Mario's speed exceeds or equals 2^15.
+                    if (val04 > 32767.0f)
+                        val04 = 32767.0f;
                     val0C = (s32)(val04 * 0x10000);
                     set_mario_anim_with_accel(m, MARIO_ANIM_SLOW_WALK_WITH_LIGHT_OBJ, val0C);
                     play_step_sound(m, 12, 62);
@@ -639,7 +648,9 @@ void anim_and_audio_for_hold_walk(struct MarioState *m) {
                 } else if (val04 > 11.0f) {
                     m->actionTimer = 2;
                 } else {
-                    //! (Speed Crash) Crashes if Mario's speed exceeds or equals 2^15.
+                    // FIXED ! (Speed Crash) Crashes if Mario's speed exceeds or equals 2^15.
+                    if (val04 > 32767.0f)
+                        val04 = 32767.0f;
                     val0C = (s32)(val04 * 0x10000);
                     set_mario_anim_with_accel(m, MARIO_ANIM_WALK_WITH_LIGHT_OBJ, val0C);
                     play_step_sound(m, 12, 62);
@@ -652,7 +663,9 @@ void anim_and_audio_for_hold_walk(struct MarioState *m) {
                 if (val04 < 8.0f) {
                     m->actionTimer = 1;
                 } else {
-                    //! (Speed Crash) Crashes if Mario's speed exceeds or equals 2^16.
+                    // FIXED ! (Speed Crash) Crashes if Mario's speed exceeds or equals 2^16.
+                    if (val04 > 65535.0f)
+                        val04 = 65535.0f;
                     val0C = (s32)(val04 / 2.0f * 0x10000);
                     set_mario_anim_with_accel(m, MARIO_ANIM_RUN_WITH_LIGHT_OBJ, val0C);
                     play_step_sound(m, 10, 49);
@@ -676,8 +689,11 @@ void push_or_sidle_wall(struct MarioState *m, Vec3f startPos) {
     f32 dx = m->pos[0] - startPos[0];
     f32 dz = m->pos[2] - startPos[2];
     f32 movedDistance = sqrtf(dx * dx + dz * dz);
-    //! (Speed Crash) If a wall is after moving 16384 distance, this crashes.
-    s32 val04 = (s32)(movedDistance * 2.0f * 0x10000);
+    s32 val04;
+    // FIXED ! (Speed Crash) If a wall is after moving 16384 distance, this crashes.
+    if (movedDistance > 16383.0f)
+        movedDistance = 16383.0f;
+    val04 = (s32)(movedDistance * 2.0f * 0x10000);
 
     if (m->forwardVel > 6.0f) {
         mario_set_forward_vel(m, 6.0f);
@@ -1188,11 +1204,17 @@ s32 act_hold_decelerating(struct MarioState *m) {
         adjust_sound_for_speed(m);
         m->particleFlags |= PARTICLE_DUST;
     } else {
-        //! (Speed Crash) This crashes if Mario has more speed than 2^15 speed.
-        if ((val0C = (s32)(m->forwardVel * 0x10000)) < 0x1000) {
-            val0C = 0x1000;
+        // FIXED ! (Speed Crash) This crashes if Mario has more speed than 2^15 speed.
+        if (m->forwardVel > 32767.0f)
+        {
+            if ((val0C = (s32)(m->forwardVel * 0x10000)) < 0x1000) {
+                val0C = 0x1000;
+            }
         }
-
+        else
+        {
+            val0C = 0x1000; //since the statement will be true always if we reach here
+        }
         set_mario_anim_with_accel(m, MARIO_ANIM_WALK_WITH_LIGHT_OBJ, val0C);
         play_step_sound(m, 12, 62);
     }

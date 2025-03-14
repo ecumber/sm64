@@ -123,7 +123,7 @@ void bully_act_back_up(void) {
 
     o->oForwardVel = 5.0;
 
-    //! bully_backup_check() happens after this function, and has the potential to reset
+    // FIXED ! bully_backup_check() happens after this function, and has the potential to reset
     //  the bully's action to BULLY_ACT_BACK_UP. Because the back up action is only
     //  set to end when the timer EQUALS 15, if this happens on that frame, the bully
     //  will be stuck in BULLY_ACT_BACK_UP forever until Mario hits it or its death

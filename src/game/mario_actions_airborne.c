@@ -199,13 +199,15 @@ void update_air_with_turn(struct MarioState *m) {
             m->forwardVel += 1.5f * coss(intendedDYaw) * intendedMag;
             m->faceAngle[1] += 512.0f * sins(intendedDYaw) * intendedMag;
         }
-
-        //! Uncapped air speed. Net positive when moving forward.
+        // FIXED ! Uncapped air speed. Net positive when moving forward.
         if (m->forwardVel > dragThreshold) {
             m->forwardVel -= 1.0f;
         }
         if (m->forwardVel < -16.0f) {
             m->forwardVel += 2.0f;
+        }        
+        if (m->forwardVel < -100.0f) {
+            m->forwardVel = -100.0f;
         }
 
         m->vel[0] = m->slideVelX = m->forwardVel * sins(m->faceAngle[1]);
@@ -231,12 +233,16 @@ void update_air_without_turn(struct MarioState *m) {
             sidewaysSpeed = intendedMag * sins(intendedDYaw) * 10.0f;
         }
 
-        //! Uncapped air speed. Net positive when moving forward.
+        // FIXED ! Uncapped air speed. Net positive when moving forward.
         if (m->forwardVel > dragThreshold) {
             m->forwardVel -= 1.0f;
         }
         if (m->forwardVel < -16.0f) {
             m->forwardVel += 2.0f;
+        }
+
+        if (m->forwardVel < -100.0f) {
+            m->forwardVel = -100.0f;
         }
 
         m->slideVelX = m->forwardVel * sins(m->faceAngle[1]);
@@ -401,8 +407,7 @@ u32 common_air_action_step(struct MarioState *m, u32 landAction, s32 animation, 
                     if (m->vel[1] > 0.0f) {
                         m->vel[1] = 0.0f;
                     }
-
-                    //! Hands-free holding. Bonking while no wall is referenced
+                    // FIXED ! Hands-free holding. Bonking while no wall is referenced
                     // sets Mario's action to a non-holding action without
                     // dropping the object, causing the hands-free holding
                     // glitch. This can be achieved using an exposed ceiling,

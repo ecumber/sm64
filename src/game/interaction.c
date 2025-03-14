@@ -1585,11 +1585,17 @@ u32 interact_cap(struct MarioState *m, UNUSED u32 interactType, struct Object *o
     u16 capMusic = 0;
     u16 capTime = 0;
 
+    // FIXED ! hat in hand glitch
+    u8 justPutOnHat = m->prevAction == ACT_PUTTING_ON_CAP;
+
     if (m->action != ACT_GETTING_BLOWN && capFlag != 0) {
         m->interactObj = o;
         o->oInteractStatus = INT_STATUS_INTERACTED;
 
-        m->flags &= ~MARIO_CAP_ON_HEAD & ~MARIO_CAP_IN_HAND;
+        if ( !justPutOnHat )
+        {
+            m->flags &= ~MARIO_CAP_ON_HEAD & ~MARIO_CAP_IN_HAND;
+        }
         m->flags |= capFlag;
 
         switch (capFlag) {
@@ -1614,7 +1620,11 @@ u32 interact_cap(struct MarioState *m, UNUSED u32 interactType, struct Object *o
         }
 
         if ((m->action & ACT_FLAG_IDLE) || m->action == ACT_WALKING) {
-            m->flags |= MARIO_CAP_IN_HAND;
+            if ( !justPutOnHat )
+            {
+                m->flags |= MARIO_CAP_IN_HAND;
+            }
+            
             set_mario_action(m, ACT_PUTTING_ON_CAP, 0);
         } else {
             m->flags |= MARIO_CAP_ON_HEAD;
