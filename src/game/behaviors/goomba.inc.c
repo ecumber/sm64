@@ -306,7 +306,7 @@ void bhv_goomba_update(void) {
         // even though the goomba isn't actually dead.
         attack = obj_handle_attacks(&sGoombaHitbox, GOOMBA_ACT_ATTACKED_MARIO,
             sGoombaAttackHandlers[o->oGoombaSize & 1]);
-        if ( attack && (attack != ATTACK_HANDLER_SPECIAL_HUGE_GOOMBA_WEAKLY_ATTACKED) ) {
+        if ( (attack != 0) && (attack != ATTACK_HANDLER_SPECIAL_HUGE_GOOMBA_WEAKLY_ATTACKED) ) {
             mark_goomba_as_dead();
         }
 

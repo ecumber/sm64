@@ -379,6 +379,8 @@ s32 act_reading_npc_dialog(struct MarioState *m) {
     s32 headTurnAmount = 0;
     s16 angleToNPC;
 
+    m->vel[1] = 0.0f; // FIXED ! VSC fix
+
     if (m->actionArg == MARIO_DIALOG_LOOK_UP) {
         headTurnAmount = -1024;
     }
@@ -442,6 +444,8 @@ s32 act_disappeared(struct MarioState *m) {
 
 s32 act_reading_automatic_dialog(struct MarioState *m) {
     u32 actionArg;
+
+    m->vel[1] = 0.0f; // FIXED ! VSC fix
 
     m->actionState++;
     if (m->actionState == 2) {
@@ -1150,6 +1154,7 @@ s32 act_exit_land_save_dialog(struct MarioState *m) {
     }
 
     m->marioObj->header.gfx.angle[1] += 0x8000;
+    m->vel[1] = 0.0f; // FIXED ! VSC fix
     return FALSE;
 }
 

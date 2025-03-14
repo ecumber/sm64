@@ -931,6 +931,7 @@ s32 act_lava_boost_land(struct MarioState *m) {
     }
 
     landing_step(m, MARIO_ANIM_STAND_UP_FROM_LAVA_BOOST, ACT_IDLE);
+    m->vel[1] = 0.0f; // FIXED ! VSC
     return FALSE;
 }
 
@@ -1001,6 +1002,7 @@ s32 act_air_throw_land(struct MarioState *m) {
     }
 
     landing_step(m, MARIO_ANIM_THROW_LIGHT_OBJECT, ACT_IDLE);
+    m->vel[1] = 0.0f; // FIXED ! VSC
     return FALSE;
 }
 
@@ -1031,6 +1033,7 @@ s32 act_twirl_land(struct MarioState *m) {
         set_mario_action(m, ACT_IDLE, 0);
     }
 
+    m->vel[1] = 0.0f;
     return FALSE;
 }
 
@@ -1049,6 +1052,7 @@ s32 act_ground_pound_land(struct MarioState *m) {
     }
 
     landing_step(m, MARIO_ANIM_GROUND_POUND_LANDING, ACT_BUTT_SLIDE_STOP);
+    m->vel[1] = 0.0f; // FIXED ! VSC
     return FALSE;
 }
 
@@ -1077,6 +1081,7 @@ s32 act_first_person(struct MarioState *m) {
 
     stationary_ground_step(m);
     set_mario_animation(m, MARIO_ANIM_FIRST_PERSON);
+    m->vel[1] = 0.0f; // FIXED ! VSC
     return FALSE;
 }
 

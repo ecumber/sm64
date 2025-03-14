@@ -165,6 +165,7 @@ void bhv_mips_act_fall_down(void) {
 
     collisionFlags = object_step();
     o->header.gfx.animInfo.animFrame = 0;
+    
 
     if ((collisionFlags & OBJ_COL_FLAG_GROUNDED) == OBJ_COL_FLAG_GROUNDED) {
         o->oAction = MIPS_ACT_WAIT_FOR_ANIMATION_DONE;
@@ -175,6 +176,7 @@ void bhv_mips_act_fall_down(void) {
         if (collisionFlags & OBJ_COL_FLAG_UNDERWATER) {
             spawn_object(o, MODEL_NONE, bhvShallowWaterSplash);
         }
+
     }
 }
 
@@ -258,11 +260,20 @@ void bhv_mips_held(void) {
  */
 void bhv_mips_dropped(void) {
     cur_obj_get_dropped();
+    // FIXED ! mips clip fix
+    // put mips forward by 1 unit so mario gets pushed backwards
+    // if he's in a wall he should get pushed back anyways
+    if (is_point_within_radius_of_mario(o->oPosX, o->oPosY, o->oPosZ, 1))
+    {
+        cur_obj_set_pos_relative(gMarioObject, 0.0f, 0.0f,
+            1.0f);
+    }
     o->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
     cur_obj_init_animation(0);
     o->oHeldState = HELD_FREE;
     cur_obj_become_tangible();
     o->oForwardVel = 3.0f;
+
     o->oAction = MIPS_ACT_IDLE;
 }
 

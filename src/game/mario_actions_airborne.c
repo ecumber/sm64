@@ -1379,6 +1379,7 @@ s32 act_forward_rollout(struct MarioState *m) {
         case AIR_STEP_LANDED:
             set_mario_action(m, ACT_FREEFALL_LAND_STOP, 0);
             play_mario_landing_sound(m, SOUND_ACTION_TERRAIN_LANDING);
+            m->vel[1] = 0.0f; // FIXED ! VSC fix
             break;
 
         case AIR_STEP_HIT_WALL:
@@ -1420,6 +1421,7 @@ s32 act_backward_rollout(struct MarioState *m) {
         case AIR_STEP_LANDED:
             set_mario_action(m, ACT_FREEFALL_LAND_STOP, 0);
             play_mario_landing_sound(m, SOUND_ACTION_TERRAIN_LANDING);
+            m->vel[1] = 0.0f; // FIXED ! VSC fix
             break;
 
         case AIR_STEP_HIT_WALL:
