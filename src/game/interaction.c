@@ -1891,8 +1891,8 @@ void mario_handle_special_floors(struct MarioState *m) {
                 pss_end_slide(m);
                 break;
         }
-
-        if (!(m->action & ACT_FLAG_AIR) && !(m->action & ACT_FLAG_SWIMMING)) {
+        // FIXED ! slide kick lava boost
+        if ( (!(m->action & ACT_FLAG_AIR) && !(m->action & ACT_FLAG_SWIMMING)) || (m->action == ACT_SLIDE_KICK) ) {
             switch (floorType) {
                 case SURFACE_BURNING:
                     check_lava_boost(m);
