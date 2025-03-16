@@ -1,5 +1,5 @@
 // cap.inc.c
-
+extern u8 gHatExistsInWorld;
 static struct ObjectHitbox sCapHitbox = {
     /* interactType:      */ INTERACT_CAP,
     /* downOffset:        */ 0,
@@ -16,6 +16,7 @@ s32 cap_set_hitbox(void) {
     obj_set_hitbox(o, &sCapHitbox);
 
     if (o->oInteractStatus & INT_STATUS_INTERACTED) {
+        gHatExistsInWorld = 0;
         o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
         o->oInteractStatus = 0;
         return TRUE;
@@ -197,6 +198,7 @@ void bhv_metal_cap_loop(void) {
 }
 
 void bhv_normal_cap_init(void) {
+    gHatExistsInWorld = 1;
     o->oGravity = 0.7f;
     o->oFriction = 0.89f;
     o->oBuoyancy = 0.9f;

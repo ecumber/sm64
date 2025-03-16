@@ -34,7 +34,8 @@
 #include "rumble_init.h"
 
 u32 unused80339F10;
-u8 unused80339F1C[20];
+u8 gHatExistsInWorld; // defined here so we can use part of this unused chunk
+u8 unused80339F1D[19];
 
 /**************************************************
  *                    ANIMATIONS                  *
@@ -1857,7 +1858,7 @@ void init_mario(void) {
     vec3f_copy(gMarioState->marioObj->header.gfx.pos, gMarioState->pos);
     vec3s_set(gMarioState->marioObj->header.gfx.angle, 0, gMarioState->faceAngle[1], 0);
 
-    if (save_file_get_cap_pos(capPos)) {
+    if (save_file_get_cap_pos(capPos) && !gHatExistsInWorld) {
         capObject = spawn_object(gMarioState->marioObj, MODEL_MARIOS_CAP, bhvNormalCap);
 
         capObject->oPosX = capPos[0];
@@ -1893,4 +1894,5 @@ void init_mario_from_save_file(void) {
 
     gHudDisplay.coins = 0;
     gHudDisplay.wedges = 8;
+    gHatExistsInWorld = 0;
 }
