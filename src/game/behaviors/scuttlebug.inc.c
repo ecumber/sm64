@@ -53,6 +53,8 @@ void bhv_scuttlebug_loop(void) {
             break;
 
         case 1:
+            // oScuttlebugUnkF8 = is lunging (4 bytes)
+            // oScuttlebugUnkFC = lunge timer (4 bytes)
             o->oForwardVel = 5.0f;
             if (cur_obj_lateral_dist_from_mario_to_home() > 1000.0f) {
                 o->oAngleToMario = cur_obj_angle_to_home();
@@ -65,7 +67,8 @@ void bhv_scuttlebug_loop(void) {
                         o->oVelY = 20.0f;
                         cur_obj_play_sound_2(SOUND_OBJ2_SCUTTLEBUG_ALERT);
                     }
-                } else if (o->oScuttlebugUnkF8 == 1) {
+                    // FIXED ! don't lunge when deactivated
+                } else if ( (o->oScuttlebugUnkF8 == 1) && (o->activeFlags != ACTIVE_FLAG_DEACTIVATED) ) {
                     o->oForwardVel = 15.0f;
                     o->oScuttlebugUnkFC++;
                     if (o->oScuttlebugUnkFC > 50) {
