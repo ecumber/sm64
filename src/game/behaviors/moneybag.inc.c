@@ -145,6 +145,13 @@ void moneybag_act_return_home(void) {
     moneybag_jump(collisionFlags);
     moneybag_check_mario_collision();
 
+    // FIXED ! moneybag duplication
+    // this check should be done first so the moneybag doesn't disappear before it starts moving again
+    if (is_point_within_radius_of_mario(o->oHomeX, o->oHomeY, o->oHomeZ, 800) == TRUE) {
+        o->oAction = MONEYBAG_ACT_MOVE_AROUND;
+        o->oMoneybagJumpState = MONEYBAG_JUMP_LANDING;
+    }
+
     if (is_point_close_to_object(o, o->oHomeX, o->oHomeY, o->oHomeZ, 100)) {
         spawn_object(o, MODEL_YELLOW_COIN, bhvMoneybagHidden);
 #ifndef VERSION_JP
@@ -152,11 +159,6 @@ void moneybag_act_return_home(void) {
 #endif
         cur_obj_init_animation(0);
         o->oAction = MONEYBAG_ACT_DISAPPEAR;
-        o->oMoneybagJumpState = MONEYBAG_JUMP_LANDING;
-    }
-
-    if (is_point_within_radius_of_mario(o->oHomeX, o->oHomeY, o->oHomeZ, 800) == TRUE) {
-        o->oAction = MONEYBAG_ACT_MOVE_AROUND;
         o->oMoneybagJumpState = MONEYBAG_JUMP_LANDING;
     }
 }

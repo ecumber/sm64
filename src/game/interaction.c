@@ -1460,23 +1460,25 @@ u32 interact_breakable(struct MarioState *m, UNUSED u32 interactType, struct Obj
 u32 interact_koopa_shell(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
     if (!(m->action & ACT_FLAG_RIDING_SHELL)) {
         u32 interaction = determine_interaction(m, o);
-
-        if (interaction == INT_HIT_FROM_ABOVE || m->action == ACT_WALKING
-            || m->action == ACT_HOLD_WALKING) {
-            m->interactObj = o;
-            m->usedObj = o;
-            m->riddenObj = o;
-
-            attack_object(o, interaction);
-            update_mario_sound_and_camera(m);
-            play_shell_music();
-            mario_drop_held_object(m);
-
-            //! Puts Mario in ground action even when in air, making it easy to
-            // escape air actions into crouch slide (shell cancel)
-            return set_mario_action(m, ACT_RIDING_SHELL_GROUND, 0);
+        // FIXED ! shell mario
+        if (m->pos[1] > m->waterLevel - 100) 
+        {
+            if (interaction == INT_HIT_FROM_ABOVE || m->action == ACT_WALKING
+                || m->action == ACT_HOLD_WALKING) {
+                m->interactObj = o;
+                m->usedObj = o;
+                m->riddenObj = o;
+    
+                attack_object(o, interaction);
+                update_mario_sound_and_camera(m);
+                play_shell_music();
+                mario_drop_held_object(m);
+    
+                //! Puts Mario in ground action even when in air, making it easy to
+                // escape air actions into crouch slide (shell cancel)
+                return set_mario_action(m, ACT_RIDING_SHELL_GROUND, 0);
+            }
         }
-
         push_mario_out_of_object(m, o, 2.0f);
     }
 

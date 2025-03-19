@@ -735,7 +735,8 @@ s32 act_dive(struct MarioState *m) {
     }
 
     set_mario_animation(m, MARIO_ANIM_DIVE);
-    if (mario_check_object_grab(m)) {
+    // FIXED ! light chuckya/king bob omb
+    if (mario_check_object_grab(m) && !(m->usedObj->oInteractionSubtype == INT_SUBTYPE_NOT_GRABBABLE)) {
         mario_grab_used_object(m);
         m->marioBodyState->grabPos = GRAB_POS_LIGHT_OBJ;
         if (m->action != ACT_DIVE) {
