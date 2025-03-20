@@ -332,7 +332,7 @@ void bhv_big_bully_with_minions_loop(void) {
             break;
 
         case BULLY_ACT_INACTIVE:
-            //! The Big Bully that spawns from killing its 3 minions uses the knockback timer
+            //FIXED ! The Big Bully that spawns from killing its 3 minions uses the knockback timer
             //  for counting the number of dead minions. This means that when it activates,
             //  the knockback timer is at 3 instead of 0. So the bully knockback time will
             //  be reduced by 3 frames (16.67%) on the first hit.

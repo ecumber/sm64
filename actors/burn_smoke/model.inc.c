@@ -8,7 +8,7 @@ static const Vtx burn_smoke_seg4_vertex_040217C0[] = {
     {{{   -50,     50,      0}, 0, {     0,      0}, {0x14, 0x0a, 0x0a, 0xff}}},
 };
 
-// //! Wrong texture format. Called as rgba16, which makes the burn smoke appear
+// // FIXED ! Wrong texture format. Called as rgba16, which makes the burn smoke appear
 //     as a transparent black burn smoke. Probably meant to show up as white-ish
 //     burn smoke, but mistakened for being intended as black smoke.
 // 0x04021800

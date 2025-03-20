@@ -25,6 +25,9 @@
 #define HANG_HIT_CEIL_OR_OOB 1
 #define HANG_LEFT_CEIL       2
 
+extern float ledgeGrabNextPosX;
+extern float ledgeGrabNextPosZ;
+
 void add_tree_leaf_particles(struct MarioState *m) {
     f32 leafHeight;
 
@@ -513,8 +516,8 @@ s32 let_go_of_ledge(struct MarioState *m) {
 
 void climb_up_ledge(struct MarioState *m) {
     set_mario_animation(m, MARIO_ANIM_IDLE_HEAD_LEFT);
-    m->pos[0] += 14.0f * sins(m->faceAngle[1]);
-    m->pos[2] += 14.0f * coss(m->faceAngle[1]);
+    m->pos[0] = ledgeGrabNextPosX; // already calculated to prevent oob ledge grab
+    m->pos[2] = ledgeGrabNextPosZ;
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
 }
 
@@ -547,8 +550,15 @@ void update_ledge_climb(struct MarioState *m, s32 animation, u32 endAction) {
 
 s32 act_ledge_grab(struct MarioState *m) {
     f32 heightAboveFloor;
+    struct Surface* floor;
+    s32 hasSpaceForMario;
     s16 intendedDYaw = m->intendedYaw - m->faceAngle[1];
-    s32 hasSpaceForMario = (m->ceilHeight - m->floorHeight >= 160.0f);
+
+    // FIXED ! oob ledge grab
+    ledgeGrabNextPosX = (m->pos[0]) + (14.0f * sins(m->faceAngle[1]));
+    ledgeGrabNextPosZ = (m->pos[2]) + (14.0f * coss(m->faceAngle[1]));
+    
+    hasSpaceForMario = ((m->ceilHeight - m->floorHeight >= 160.0f) && (find_floor(ledgeGrabNextPosX, m->pos[1], ledgeGrabNextPosZ, &floor) != FLOOR_LOWER_LIMIT));
 
     if (m->actionTimer < 10) {
         m->actionTimer++;

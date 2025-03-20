@@ -268,8 +268,7 @@ static void monty_mole_hide_in_hole(void) {
         o->oAction = MONTY_MOLE_ACT_SELECT_HOLE;
         o->oVelY = 0.0f;
 
-        // FIXED
-        //! Even though the object becomes intangible here, it is still possible
+        // FIXED ! Even though the object becomes intangible here, it is still possible
         //  for a bob-omb to interact with it later in the frame (since bob-ombs
         //  come after monty moles in processing order).
         //  This means that the monty mole can be attacked while in the select hole
@@ -387,8 +386,7 @@ void bhv_monty_mole_update(void) {
             }
         }
 
-        // FIXED
-        //! No overflow check
+        // FIXED ! No overflow check
         if (sMontyMoleKillStreak < 2147483647)
             sMontyMoleKillStreak++;
 

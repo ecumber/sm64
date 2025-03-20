@@ -35,7 +35,9 @@
 
 u32 unused80339F10;
 u8 gHatExistsInWorld; // defined here so we can use part of this unused chunk
-u8 unused80339F1D[19];
+float ledgeGrabNextPosX;
+float ledgeGrabNextPosZ;
+u8 unused80339F25[11];
 
 /**************************************************
  *                    ANIMATIONS                  *

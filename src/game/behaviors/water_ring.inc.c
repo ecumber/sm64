@@ -15,8 +15,11 @@ void water_ring_init(void) {
     o->oWaterRingScalePhaseX = (s32)(random_float() * 4096.0f) + 0x1000;
     o->oWaterRingScalePhaseY = (s32)(random_float() * 4096.0f) + 0x1000;
     o->oWaterRingScalePhaseZ = (s32)(random_float() * 4096.0f) + 0x1000;
-
-    //! This normal calculation assumes a facing yaw of 0, which is not the case
+   
+    o->oFaceAngleYaw = 0;
+    o->oFaceAngleRoll *= -1;
+    
+    // FIXED ! This normal calculation assumes a facing yaw of 0, which is not the case
     //  for the manta ray rings. It also errs by multiplying the normal X by -1.
     //  This cause the ring's orientation for the purposes of collision to be
     //  different than the graphical orientation, which means that Mario won't
