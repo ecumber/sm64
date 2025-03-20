@@ -1153,6 +1153,7 @@ s32 act_decelerating(struct MarioState *m) {
 s32 act_hold_decelerating(struct MarioState *m) {
     s32 val0C;
     s16 slopeClass = mario_get_floor_class(m);
+    f32 sanitizedSpeed;
 
     if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_DROP_OBJECT) {
         return drop_and_set_mario_action(m, ACT_WALKING, 0);
@@ -1205,15 +1206,11 @@ s32 act_hold_decelerating(struct MarioState *m) {
         m->particleFlags |= PARTICLE_DUST;
     } else {
         // FIXED ! (Speed Crash) This crashes if Mario has more speed than 2^15 speed.
-        if (m->forwardVel > 32767.0f)
-        {
-            if ((val0C = (s32)(m->forwardVel * 0x10000)) < 0x1000) {
-                val0C = 0x1000;
-            }
-        }
-        else
-        {
-            val0C = 0x1000; //since the statement will be true always if we reach here
+        sanitizedSpeed = m->forwardVel;
+        if (sanitizedSpeed > 32767.0f)
+            sanitizedSpeed = 32767.0f;
+        if ((val0C = (s32)(sanitizedSpeed * 0x10000)) < 0x1000) {
+            val0C = 0x1000;
         }
         set_mario_anim_with_accel(m, MARIO_ANIM_WALK_WITH_LIGHT_OBJ, val0C);
         play_step_sound(m, 12, 62);
