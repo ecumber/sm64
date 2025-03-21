@@ -14,7 +14,7 @@ void bowser_tail_anchor_act_default(void) {
     cur_obj_become_tangible();
     cur_obj_scale(1.0f);
 
-    if (bowser->oAction == BOWSER_ACT_TILT_LAVA_PLATFORM) {
+    if ((bowser->oAction == BOWSER_ACT_TILT_LAVA_PLATFORM) || (bowser->oAction == BOWSER_ACT_TELEPORT)) {
         // Bowser cannot be touched when he tilts BitFS platform
         bowser->oIntangibleTimer = -1;
     } else if (obj_check_if_collided_with_object(o, gMarioObject)) {

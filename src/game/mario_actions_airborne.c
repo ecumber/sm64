@@ -1713,8 +1713,11 @@ s32 act_shot_from_cannon(struct MarioState *m) {
             lava_boost_on_wall(m);
             break;
     }
-
-    if ((m->flags & MARIO_WING_CAP) && m->vel[1] < 0.0f) {
+    
+    // FIXED ! flying while dead
+    // the health check isn't necessary with the flying fix (since it would put him in freefall), but
+    // i think it looks better
+    if ((m->flags & MARIO_WING_CAP) && (m->vel[1] < 0.0f) && (m->health < 0x00FF)) {
         set_mario_action(m, ACT_FLYING, 0);
     }
 
@@ -1740,8 +1743,8 @@ s32 act_flying(struct MarioState *m) {
         }
         return set_mario_action(m, ACT_GROUND_POUND, 1);
     }
-
-    if (!(m->flags & MARIO_WING_CAP)) {
+    // FIXED ! flying while dead
+    if (!(m->flags & MARIO_WING_CAP) || (m->health <= 0x00FF)) {
         if (m->area->camera->mode == CAMERA_MODE_BEHIND_MARIO) {
             set_camera_mode(m->area->camera, m->area->camera->defMode, 1);
         }
