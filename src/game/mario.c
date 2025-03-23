@@ -1811,6 +1811,9 @@ void init_mario(void) {
     }
 
     gMarioState->forwardVel = 0.0f;
+    // FIXED ! slide velocity not reset on mario init
+    gMarioState->slideVelX = 0.0f;
+    gMarioState->slideVelZ = 0.0f;
     gMarioState->squishTimer = 0;
 
     gMarioState->hurtCounter = 0;

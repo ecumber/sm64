@@ -10272,8 +10272,8 @@ BAD_RETURN(s32) cutscene_door_fix_cam(struct Camera *c) {
  * Loop until Mario is no longer using the door.
  */
 BAD_RETURN(s32) cutscene_door_loop(struct Camera *c) {
-    //! bitwise AND instead of boolean
-    if ((sMarioCamState->action != ACT_PULLING_DOOR) & (sMarioCamState->action != ACT_PUSHING_DOOR)) {
+    // FIXED ! bitwise AND instead of boolean
+    if ((sMarioCamState->action != ACT_PULLING_DOOR) && (sMarioCamState->action != ACT_PUSHING_DOOR)) {
         gCutsceneTimer = CUTSCENE_STOP;
         c->cutscene = 0;
     }

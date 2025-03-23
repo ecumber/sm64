@@ -250,6 +250,9 @@ static void update_swimming_speed(struct MarioState *m, f32 decelThreshold) {
     m->vel[0] = m->forwardVel * coss(m->faceAngle[0]) * sins(m->faceAngle[1]);
     m->vel[1] = m->forwardVel * sins(m->faceAngle[0]) + buoyancy;
     m->vel[2] = m->forwardVel * coss(m->faceAngle[0]) * coss(m->faceAngle[1]);
+    // FIXED ! speed conservation when swimming
+    m->slideVelX = m->vel[0];
+    m->slideVelZ = m->vel[2];
 }
 
 static void update_swimming_yaw(struct MarioState *m) {

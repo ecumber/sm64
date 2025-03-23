@@ -1320,7 +1320,8 @@ s32 act_crawling(struct MarioState *m) {
 }
 
 s32 act_burning_ground(struct MarioState *m) {
-    if (m->input & INPUT_A_PRESSED) {
+    // FIXED ! prolonging death while burn jumping
+    if ((m->input & INPUT_A_PRESSED) && (m->health > 0x100)) {
         return set_mario_action(m, ACT_BURNING_JUMP, 0);
     }
 
