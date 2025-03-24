@@ -127,18 +127,19 @@ s32 mario_update_punch_sequence(struct MarioState *m) {
             break;
 
         case 9:
-            play_mario_action_sound(m, SOUND_MARIO_PUNCH_HOO, 1);
-            set_mario_animation(m, MARIO_ANIM_BREAKDANCE);
-            animFrame = m->marioObj->header.gfx.animInfo.animFrame;
-
-            if (animFrame >= 2 && animFrame < 8) {
-                m->flags |= MARIO_TRIPPING;
-            }
-
-            if (is_anim_at_end(m)) {
-                set_mario_action(m, crouchEndAction, 0);
-            }
-            break;
+            set_mario_action(m, ACT_DEBUG_FREE_MOVE, 0);
+            //play_mario_action_sound(m, SOUND_MARIO_PUNCH_HOO, 1);
+            //set_mario_animation(m, MARIO_ANIM_BREAKDANCE);
+            //animFrame = m->marioObj->header.gfx.animInfo.animFrame;
+//
+            //if (animFrame >= 2 && animFrame < 8) {
+            //    m->flags |= MARIO_TRIPPING;
+            //}
+//
+            //if (is_anim_at_end(m)) {
+            //    set_mario_action(m, crouchEndAction, 0);
+            //}
+            //break;
     }
 
     return FALSE;
@@ -223,7 +224,7 @@ s32 act_dive_picking_up(struct MarioState *m) {
     }
 
     if (m->input & INPUT_ABOVE_SLIDE) {
-        return set_mario_action(m, ACT_BEGIN_SLIDING, 0);
+        return drop_and_set_mario_action(m, ACT_BEGIN_SLIDING, 0);
     }
 
     animated_stationary_ground_step(m, MARIO_ANIM_STOP_SLIDE_LIGHT_OBJ, ACT_HOLD_IDLE);

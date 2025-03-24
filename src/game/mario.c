@@ -1467,7 +1467,8 @@ void update_mario_health(struct MarioState *m) {
                     m->health -= 4;
                 }
             } else {
-                if ((m->action & ACT_FLAG_SWIMMING) && !(m->action & ACT_FLAG_INTANGIBLE)) {
+                // FIXED ! losing health underwater with metal cap due to knockback
+                if ((m->action & ACT_FLAG_SWIMMING) && !(m->action & ACT_FLAG_INTANGIBLE) && !(m->flags & MARIO_METAL_CAP)) {
                     terrainIsSnow = (m->area->terrainType & TERRAIN_MASK) == TERRAIN_SNOW;
 
                     // When Mario is near the water surface, recover health (unless in snow),

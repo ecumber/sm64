@@ -56,8 +56,7 @@ void transfer_bully_speed(struct BullyCollisionData *obj1, struct BullyCollision
     f32 rx = obj2->posX - obj1->posX;
     f32 rz = obj2->posZ - obj1->posZ;
 
-    // FIXED
-    //! Bully NaN crash
+    // FIXED ! Bully NaN crash
     f32 divisor = (rx * rx + rz * rz);
     f32 projectedV1;
     f32 projectedV2;
