@@ -274,9 +274,21 @@ void debug_unknown_level_select_check(void) {
         sDebugLvSelectCheckFlag++; // again, just do = TRUE...
 
         if (!gDebugLevelSelect) {
-            gDebugInfoFlags = DEBUG_INFO_NOFLAGS;
+            gDebugInfoFlags = 
+            #ifdef ECUMBER_DEBUG
+            DEBUG_INFO_FLAG_ALL
+            #else
+            DEBUG_INFO_NOFLAGS
+            #endif
+            ;
         } else {
-            gDebugInfoFlags = DEBUG_INFO_FLAG_LSELECT;
+            gDebugInfoFlags = 
+            #ifdef ECUMBER_DEBUG
+            DEBUG_INFO_FLAG_ALL
+            #else
+            DEBUG_INFO_FLAG_LSELECT
+            #endif
+            ;
         }
 
         gNumCalls.floor = 0;
@@ -438,6 +450,10 @@ void try_print_debug_mario_object_info(void) {
     if (gUnknownWallCount != 0) {
         print_debug_bottom_up("WALL   %d", gUnknownWallCount);
     }
+    #ifdef ECUMBER_DEBUG
+    try_change_debug_page();
+    try_modify_debug_controls();
+    #endif
 }
 
 /*
