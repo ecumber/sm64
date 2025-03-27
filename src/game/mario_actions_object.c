@@ -127,19 +127,22 @@ s32 mario_update_punch_sequence(struct MarioState *m) {
             break;
 
         case 9:
+#ifdef ECUMBER_DEBUG
             set_mario_action(m, ACT_DEBUG_FREE_MOVE, 0);
-            //play_mario_action_sound(m, SOUND_MARIO_PUNCH_HOO, 1);
-            //set_mario_animation(m, MARIO_ANIM_BREAKDANCE);
-            //animFrame = m->marioObj->header.gfx.animInfo.animFrame;
-//
-            //if (animFrame >= 2 && animFrame < 8) {
-            //    m->flags |= MARIO_TRIPPING;
-            //}
-//
-            //if (is_anim_at_end(m)) {
-            //    set_mario_action(m, crouchEndAction, 0);
-            //}
-            //break;
+#else    
+            play_mario_action_sound(m, SOUND_MARIO_PUNCH_HOO, 1);
+            set_mario_animation(m, MARIO_ANIM_BREAKDANCE);
+            animFrame = m->marioObj->header.gfx.animInfo.animFrame;
+
+            if (animFrame >= 2 && animFrame < 8) {
+                m->flags |= MARIO_TRIPPING;
+            }
+
+            if (is_anim_at_end(m)) {
+                set_mario_action(m, crouchEndAction, 0);
+            }
+            break;
+#endif
     }
 
     return FALSE;
