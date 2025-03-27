@@ -30,6 +30,7 @@ void bhv_ttc_pendulum_init(void) {
  * Update function for bhvTTCPendulum.
  */
 void bhv_ttc_pendulum_update(void) {
+    f32 nextChangeInAngleVel;
     if (gTTCSpeedSetting != TTC_SPEED_STOPPED) {
         UNUSED f32 startVel = o->oTTCPendulumAngleVel;
 
@@ -48,11 +49,16 @@ void bhv_ttc_pendulum_update(void) {
             if (o->oTTCPendulumAngle * o->oTTCPendulumAccelDir > 0.0f) {
                 o->oTTCPendulumAccelDir = -o->oTTCPendulumAccelDir;
             }
-            o->oTTCPendulumAngleVel += o->oTTCPendulumAngleAccel * o->oTTCPendulumAccelDir;
+            nextChangeInAngleVel = o->oTTCPendulumAngleAccel * o->oTTCPendulumAccelDir;
+            //FIXED ! ttc pendulum speed manipulation
+            // 1092 is divisible by both 13 and 42 and is above the normal angle velocity
+            if ( (o->oTTCPendulumAngleVel + nextChangeInAngleVel) > 1092.0f )
+                nextChangeInAngleVel = 1092.0f;
+            o->oTTCPendulumAngleVel += nextChangeInAngleVel;
 
             // Ignoring floating point imprecision, angle vel should always be
             // a multiple of angle accel, and so it will eventually reach zero
-            //! If the pendulum is moving fast enough, the vel could fail to
+            // TODO ! If the pendulum is moving fast enough, the vel could fail to
             //  be a multiple of angle accel, and so the pendulum would continue
             //  oscillating forever
             if (o->oTTCPendulumAngleVel == 0.0f) {
@@ -80,7 +86,7 @@ void bhv_ttc_pendulum_update(void) {
         }
     } else {
     }
-
+    // since speed is capped theoretically this should never be too big to cause a crash
     o->oFaceAngleRoll = (s32) o->oTTCPendulumAngle;
     // Note: no platform displacement
 }
