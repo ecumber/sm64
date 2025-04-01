@@ -119,7 +119,7 @@ endif
 # NON_MATCHING - whether to build a matching, identical copy of the ROM
 #   1 - enable some alternate, more portable code that does not produce a matching ROM
 #   0 - build a matching ROM
-NON_MATCHING ?= 0
+NON_MATCHING ?= 1
 $(eval $(call validate-option,NON_MATCHING,0 1))
 
 ifeq ($(TARGET_N64),0)

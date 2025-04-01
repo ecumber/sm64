@@ -27,6 +27,10 @@
 #include "spawn_object.h"
 #include "spawn_sound.h"
 
+#ifdef ECUMBER_DEBUG
+extern s8 gShowDebugText;
+#endif
+
 static s8 sBBHStairJiggleOffsets[] = { -8, 8, -4, 4 };
 static s16 sPowersOfTwo[] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 };
 static s8 sLevelsWithRooms[] = { LEVEL_BBH, LEVEL_CASTLE, LEVEL_HMC, -1 };
@@ -189,7 +193,8 @@ Gfx *geo_switch_area(s32 callContext, struct GraphNode *node)
             if (sp20) {
                 gMarioCurrentRoom = sp20->room;
                 sp26 = sp20->room - 1;
-                print_debug_top_down_objectinfo("areainfo %d", sp20->room);
+                if (gShowDebugText)
+                    print_debug_top_down_objectinfo("areainfo %d", sp20->room);
 
                 if (sp26 >= 0) {
                     switchCase->selectedCase = sp26;
