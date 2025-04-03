@@ -373,9 +373,10 @@ UNUSED static
 #endif
 void try_modify_debug_controls(void) {
     s32 sp4;
-
-    if (gPlayer1Controller->buttonPressed & Z_TRIG) {
+    //changed to r + z because it was annoying
+    if ((gPlayer1Controller->buttonPressed & Z_TRIG) && (gPlayer1Controller->buttonPressed & R_TRIG)) {
         sNoExtraDebug ^= 1;
+        gShowDebugText ^= 1;
     }
     if (!(gPlayer1Controller->buttonDown & (L_TRIG | R_TRIG)) && !sNoExtraDebug) {
         sp4 = 1;

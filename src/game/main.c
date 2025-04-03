@@ -56,7 +56,11 @@ s8 gDebugLevelSelect = FALSE;
 s8 D_8032C650 = 0;
 
 s8 gShowProfiler = FALSE;
+#ifdef ECUMBER_DEBUG
+s8 gShowDebugText = TRUE;
+#else
 s8 gShowDebugText = FALSE;
+#endif
 
 // unused
 void handle_debug_key_sequences(void) {
