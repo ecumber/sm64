@@ -89,7 +89,7 @@ void bhv_spawned_coin_loop(void) {
         cur_obj_play_sound_2(SOUND_GENERAL_COIN_SPURT);
     }
 
-    if (o->oVelY < 0.0f) {
+    if ((o->oVelY < 0.0f) || (o->oFloorHeight == o->oPosY)) { // FIXED ! coin intangiblility
         cur_obj_become_tangible();
     }
 
