@@ -9,7 +9,10 @@ enum DebugPage {
     DEBUG_PAGE_MAPINFO,          // 2: mapinfo
     DEBUG_PAGE_STAGEINFO,        // 3: stageinfo
     DEBUG_PAGE_EFFECTINFO,       // 4: effectinfo
-    DEBUG_PAGE_ENEMYINFO         // 5: enemyinfo
+    DEBUG_PAGE_ENEMYINFO         // 5: enemyinfo   
+    #ifdef ECUMBER_DEBUG      
+    ,DEBUG_PAGE_MARIOINFO         // 6: marioinfo
+    #endif
 };
 
 s64 get_current_clock(void);

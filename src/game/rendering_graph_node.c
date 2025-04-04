@@ -11,6 +11,10 @@
 #include "shadow.h"
 #include "sm64.h"
 
+#ifdef ECUMBER_DEBUG
+extern s8 gShowExtraDebug;
+#endif
+
 /**
  * This file contains the code that processes the scene graph for rendering.
  * The scene graph is responsible for drawing everything except the HUD / text boxes.
@@ -1079,7 +1083,11 @@ void geo_process_root(struct GraphNodeRoot *node, Vp *b, Vp *c, s32 clearColor) 
             geo_process_node_and_siblings(node->node.children);
         }
         gCurGraphNodeRoot = NULL;
+        #ifdef ECUMBER_DEBUG
+        if (gShowDebugText && gShowExtraDebug) {
+        #else
         if (gShowDebugText) {
+        #endif
             print_text_fmt_int(180, 36, "MEM %d",
                                gDisplayListHeap->totalSpace - gDisplayListHeap->usedSpace);
         }

@@ -1588,6 +1588,10 @@ void bowser_free_update(void) {
     struct Surface *floor;
     struct Object *platform;
     UNUSED f32 floorHeight;
+    
+    #ifdef ECUMBER_DEBUG   
+    bowser_debug_actions();
+    #endif
 
     // Platform displacement check (for BitFS)
     if ((platform = o->platform) != NULL) {
