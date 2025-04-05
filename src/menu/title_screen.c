@@ -168,7 +168,7 @@ s32 intro_regular(void) {
 #endif
     print_intro_text();
 
-    #ifdef ECUMBER_DEBUG     
+    #ifdef ECUMBER_DEBUG
     if (gPlayer1Controller->buttonPressed & START_BUTTON) {
         // ... the level select combo is being pressed, which uses START. If this
         // is the case, quit the menu instead.
