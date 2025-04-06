@@ -18,7 +18,9 @@
 #define DEBUG_INFO_FLAG_DPRINT (1 << 0)
 #define DEBUG_INFO_FLAG_LSELECT (1 << 1)
 #define DEBUG_INFO_FLAG_ALL 0xFF
-
+#ifdef ECUMBER_DEBUG   
+extern struct MarioState *gMarioState;
+#endif
 s16 gDebugPrintState1[6]; // prints top-down?
 s16 gDebugPrintState2[6]; // prints bottom-up?
 
@@ -48,8 +50,12 @@ s32 sDebugInfoDPadUpdID = 0;
 s8 sDebugLvSelectCheckFlag = FALSE;
 
 #define DEBUG_PAGE_MIN DEBUG_PAGE_OBJECTINFO
+#ifdef ECUMBER_DEBUG   
+s8 gShowExtraDebug;
+#define DEBUG_PAGE_MAX DEBUG_PAGE_MARIOINFO
+#else
 #define DEBUG_PAGE_MAX DEBUG_PAGE_ENEMYINFO
-
+#endif
 s8 sDebugPage = DEBUG_PAGE_MIN;
 s8 sNoExtraDebug = FALSE;
 s8 sDebugStringArrPrinted = FALSE;
@@ -180,7 +186,11 @@ void print_mapinfo(void) {
     print_debug_top_down_normal("mapinfo", 0);
 #ifndef VERSION_EU
     print_debug_top_down_mapinfo("area %x", area);
+    #ifdef ECUMBER_DEBUG   
+    print_debug_top_down_mapinfo("w*   %d", gCurrentObject->oPosX);
+    #else
     print_debug_top_down_mapinfo("wx   %d", gCurrentObject->oPosX);
+    #endif
     //! Fat finger: programmer hit tab instead of space. Japanese
     // thumb shift keyboards had the tab key next to the spacebar,
     // so this was likely the reason.
@@ -245,7 +255,17 @@ void print_enemyinfo(void) {
     print_debug_top_down_normal("enemyinfo", 0);
     print_string_array_info(sDebugEnemyStringInfo);
 }
-
+#ifdef ECUMBER_DEBUG   
+void print_marioinfo(void) {
+    print_debug_top_down_normal("marioinfo", 0);
+    print_debug_top_down_mapinfo("HSPD %d", gMarioState->forwardVel);
+    print_debug_top_down_mapinfo("VSPD %d", gMarioState->vel[1]);
+    print_debug_top_down_mapinfo("HP %d", gMarioState->health);
+    print_debug_top_down_mapinfo("HEAL %d", gMarioState->healCounter);
+    print_debug_top_down_mapinfo("HURT %d", gMarioState->hurtCounter);
+    print_debug_top_down_mapinfo("CAPTM %d", gMarioState->capTimer);
+}
+#endif
 void update_debug_dpadmask(void) {
     s32 dPadMask = gPlayer1Controller->buttonDown & (U_JPAD | D_JPAD | L_JPAD | R_JPAD);
 
@@ -353,6 +373,16 @@ UNUSED static void try_change_debug_page(void) {
             && (gPlayer1Controller->buttonDown & (L_TRIG | R_TRIG))) {
             sDebugPage--;
         }
+#ifdef ECUMBER_DEBUG
+        if ((gPlayer1Controller->buttonPressed & U_JPAD)
+        && (gPlayer1Controller->buttonDown & (L_TRIG | R_TRIG))) {
+            gShowExtraDebug ^= 1;
+        }
+        if ((gPlayer1Controller->buttonPressed & D_JPAD)
+        && (gPlayer1Controller->buttonDown & (L_TRIG | R_TRIG))) {
+            set_mario_action(gMarioState, ACT_DEBUG_FREE_MOVE, 0);
+        }
+#endif
         if (sDebugPage >= (DEBUG_PAGE_MAX + 1)) {
             sDebugPage = DEBUG_PAGE_MIN;
         }
@@ -373,8 +403,12 @@ UNUSED static
 #endif
 void try_modify_debug_controls(void) {
     s32 sp4;
+#ifdef ECUMBER_DEBUG
     //changed to r + z because it was annoying
-    if ((gPlayer1Controller->buttonPressed & Z_TRIG) && (gPlayer1Controller->buttonPressed & R_TRIG)) {
+    if ((gPlayer1Controller->buttonDown & Z_TRIG) && (gPlayer1Controller->buttonPressed & R_TRIG)) {
+#else
+    if (gPlayer1Controller->buttonPressed & Z_TRIG) {
+#endif
         sNoExtraDebug ^= 1;
         gShowDebugText ^= 1;
     }
@@ -437,6 +471,10 @@ void try_print_debug_mario_object_info(void) {
             case DEBUG_PAGE_ENEMYINFO:
                 print_enemyinfo();
                 break;
+#ifdef ECUMBER_DEBUG   
+            case DEBUG_PAGE_MARIOINFO:
+                print_marioinfo();
+#endif
             default:
                 break;
         }
@@ -451,10 +489,10 @@ void try_print_debug_mario_object_info(void) {
     if (gUnknownWallCount != 0) {
         print_debug_bottom_up("WALL   %d", gUnknownWallCount);
     }
-    #ifdef ECUMBER_DEBUG
+#ifdef ECUMBER_DEBUG
     try_change_debug_page();
     try_modify_debug_controls();
-    #endif
+#endif
 }
 
 /*
@@ -479,6 +517,58 @@ void try_print_debug_mario_level_info(void) {
     }
 }
 
+#ifdef ECUMBER_DEBUG
+void try_do_mario_debug_hat_spawn(void) {
+    if (gPlayer1Controller->buttonDown & L_TRIG)    
+        return;
+    if (gPlayer1Controller->buttonPressed & R_JPAD) {
+        spawn_object_relative(0, 0, 100, 200, gCurrentObject, MODEL_MARIOS_CAP, bhvVanishCap);
+    }
+    if (gPlayer1Controller->buttonPressed & L_JPAD) {
+        spawn_object_relative(0, 0, 100, 200, gCurrentObject, MODEL_MARIOS_METAL_CAP,
+            bhvMetalCap);
+    }
+    if (gPlayer1Controller->buttonPressed & D_JPAD) {
+        spawn_object_relative(0, 0, 100, 200, gCurrentObject, MODEL_MARIOS_WING_CAP,
+            bhvWingCap);
+    }
+}
+void try_do_mario_debug_movement_item_spawn(void) {
+    if (gPlayer1Controller->buttonDown & L_TRIG)    
+        return;
+    if (gPlayer1Controller->buttonPressed & R_JPAD) {
+        spawn_object_relative(0, 0, 100, 200, gCurrentObject, MODEL_KOOPA_SHELL, bhvKoopaShell);
+    }
+    if (gPlayer1Controller->buttonPressed & L_JPAD) {
+        spawn_object_relative(0, 0, 100, 200, gCurrentObject, MODEL_BREAKABLE_BOX_SMALL,
+                              bhvJumpingBox);
+    }
+    if (gPlayer1Controller->buttonPressed & D_JPAD) {
+        spawn_object_relative(0, 0, 100, 200, gCurrentObject, MODEL_KOOPA_SHELL,
+                              bhvKoopaShellUnderwater);
+    }
+}
+
+void print_debug_spawntype(s16 type)
+{
+    if (type <= 0)
+        return;
+    switch (type)
+    {
+        case 1:
+            print_debug_bottom_up("MOVITEM", 0);
+            break;
+        case 2:
+            print_debug_bottom_up("HATS", 0);
+            break;
+        default:
+            break;
+    }
+    print_debug_bottom_up("SPAWNTYPE", 0);
+    
+}
+
+#endif
 /*
  * One of the only remaining debug controls activatable from the
  * debug control array. This function lets you spawn 1 of 3
@@ -489,7 +579,24 @@ void try_print_debug_mario_level_info(void) {
  */
 void try_do_mario_debug_object_spawn(void) {
     UNUSED u8 filler[4];
-
+    #ifdef ECUMBER_DEBUG
+    s16 spawnType = gDebugInfo[DEBUG_PAGE_ENEMYINFO][7];
+    print_debug_spawntype(spawnType);
+    if (sDebugPage == DEBUG_PAGE_STAGEINFO)
+    {
+        switch (spawnType)
+        {
+            case 1:
+                try_do_mario_debug_movement_item_spawn();
+                break;
+            case 2:
+                try_do_mario_debug_hat_spawn();
+                break;
+            default:
+                break;
+        }
+    }
+    #else
     if (sDebugPage == DEBUG_PAGE_STAGEINFO && gDebugInfo[DEBUG_PAGE_ENEMYINFO][7] == 1) {
         if (gPlayer1Controller->buttonPressed & R_JPAD) {
             spawn_object_relative(0, 0, 100, 200, gCurrentObject, MODEL_KOOPA_SHELL, bhvKoopaShell);
@@ -503,8 +610,8 @@ void try_do_mario_debug_object_spawn(void) {
                                   bhvKoopaShellUnderwater);
         }
     }
+    #endif
 }
-
 // TODO: figure out what this is
 void debug_print_obj_move_flags(void) {
 #ifndef VERSION_EU // TODO: Is there a better way to diff this? static EU doesn't seem to work.

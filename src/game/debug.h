@@ -9,7 +9,10 @@ enum DebugPage {
     DEBUG_PAGE_MAPINFO,          // 2: mapinfo
     DEBUG_PAGE_STAGEINFO,        // 3: stageinfo
     DEBUG_PAGE_EFFECTINFO,       // 4: effectinfo
-    DEBUG_PAGE_ENEMYINFO         // 5: enemyinfo
+    DEBUG_PAGE_ENEMYINFO         // 5: enemyinfo   
+    #ifdef ECUMBER_DEBUG      
+    ,DEBUG_PAGE_MARIOINFO         // 6: marioinfo
+    #endif
 };
 
 s64 get_current_clock(void);
@@ -23,6 +26,10 @@ void reset_debug_objectinfo(void);
 void stub_debug_5(void);
 void try_print_debug_mario_object_info(void);
 void try_do_mario_debug_object_spawn(void);
+#ifdef ECUMBER_DEBUG
+void try_do_mario_debug_hat_spawn(void);
+void try_do_mario_debug_movement_item_spawn(void);
+#endif
 void try_print_debug_mario_level_info(void);
 
 #endif // DEBUG_H

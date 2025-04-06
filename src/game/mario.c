@@ -38,7 +38,9 @@ u8 gHatExistsInWorld; // defined here so we can use part of this unused chunk
 float ledgeGrabNextPosX;
 float ledgeGrabNextPosZ;
 u8 unused80339F25[11];
-
+#ifdef ECUMBER_DEBUG
+extern s8 gShowExtraDebug;
+#endif
 /**************************************************
  *                    ANIMATIONS                  *
  **************************************************/
@@ -1237,8 +1239,11 @@ void squish_mario_model(struct MarioState *m) {
 void debug_print_speed_action_normal(struct MarioState *m) {
     f32 steepness;
     f32 floor_nY;
-
+    #ifdef ECUMBER_DEBUG
+    if (gShowDebugText && gShowExtraDebug) {
+    #else
     if (gShowDebugText) {
+    #endif
         steepness = sqrtf(
             ((m->floor->normal.x * m->floor->normal.x) + (m->floor->normal.z * m->floor->normal.z)));
         floor_nY = m->floor->normal.y;
