@@ -176,7 +176,7 @@ void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
     facingDYaw = m->faceAngle[1] - m->slideYaw;
     newFacingDYaw = facingDYaw;
 
-    //! -0x4000 not handled - can slide down a slope while facing perpendicular to it
+    // FIXED ! -0x4000 not handled - can slide down a slope while facing perpendicular to it
     if (newFacingDYaw > 0 && newFacingDYaw <= 0x4000) {
         if ((newFacingDYaw -= 0x200) < 0) {
             newFacingDYaw = 0;
@@ -189,7 +189,7 @@ void update_sliding_angle(struct MarioState *m, f32 accel, f32 lossFactor) {
         if ((newFacingDYaw += 0x200) > 0x8000) {
             newFacingDYaw = 0x8000;
         }
-    } else if (newFacingDYaw > -0x8000 && newFacingDYaw < -0x4000) {
+    } else if (newFacingDYaw > -0x8000 && newFacingDYaw <= -0x4000) {
         if ((newFacingDYaw -= 0x200) < -0x8000) {
             newFacingDYaw = -0x8000;
         }

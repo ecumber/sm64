@@ -430,9 +430,9 @@ s16 object_step(void) {
     f32 objVelZ = o->oForwardVel * coss(o->oMoveAngleYaw);
 
     s16 collisionFlags = 0;
-
+    //FIXED ! objects moving fast against wall
     // Find any wall collisions, receive the push, and set the flag.
-    if (obj_find_wall(objX + objVelX, objY, objZ + objVelZ, objVelX, objVelZ) == 0) {
+    if (obj_find_wall(objX, objY, objZ, objVelX, objVelZ) == 0) {
         collisionFlags += OBJ_COL_FLAG_HIT_WALL;
     }
 

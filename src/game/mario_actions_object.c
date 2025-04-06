@@ -131,14 +131,6 @@ s32 mario_update_punch_sequence(struct MarioState *m) {
             break;
 
         case 9:
-#ifdef ECUMBER_DEBUG
-            if (gShowDebugText)
-            {
-            set_mario_action(m, ACT_DEBUG_FREE_MOVE, 0);
-            }
-            else
-            { 
-#endif
             play_mario_action_sound(m, SOUND_MARIO_PUNCH_HOO, 1);
             set_mario_animation(m, MARIO_ANIM_BREAKDANCE);
             animFrame = m->marioObj->header.gfx.animInfo.animFrame;
@@ -151,9 +143,6 @@ s32 mario_update_punch_sequence(struct MarioState *m) {
                 set_mario_action(m, crouchEndAction, 0);
             }
             break;
-#ifdef ECUMBER_DEBUG
-        }
-#endif
     }
 
     return FALSE;
