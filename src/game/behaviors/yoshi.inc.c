@@ -67,6 +67,8 @@ void yoshi_idle_loop(void) {
     cur_obj_init_animation(0);
 
     if (o->oInteractStatus == INT_STATUS_INTERACTED) {
+        // FIXED ! sound repeating while talking to npc
+        play_puzzle_jingle();
         o->oAction = YOSHI_ACT_TALK;
     }
 
@@ -81,6 +83,7 @@ void yoshi_idle_loop(void) {
 }
 
 void yoshi_talk_loop(void) {
+    // FIXED ! sound repeating while talking to npc
     if ((s16) o->oMoveAngleYaw == (s16) o->oAngleToMario) {
         cur_obj_init_animation(0);
         if (set_mario_npc_dialog(MARIO_DIALOG_LOOK_FRONT) == MARIO_DIALOG_STATUS_SPEAK) {
@@ -96,7 +99,6 @@ void yoshi_talk_loop(void) {
         }
     } else {
         cur_obj_init_animation(1);
-        play_puzzle_jingle();
         o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oAngleToMario, 0x500);
     }
 }

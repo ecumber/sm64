@@ -165,7 +165,7 @@ static void fly_guy_act_shoot_fire(void) {
             }
         }
     } else {
-        //! By triggering this repeatedly, we can keep obj_grow_then_shrink
+        // FIXED ! By triggering this repeatedly, we can keep obj_grow_then_shrink
         // in the "grow" phase. But because oFlyGuyScaleVel continues decreasing
         // past -0.03, the fly guy shrinks more than he is supposed to. We can
         // arbitrarily decrease the fly guy's scale in this way.

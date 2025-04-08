@@ -387,7 +387,7 @@ void bhv_monty_mole_update(void) {
         }
 
         // FIXED ! No overflow check
-        if (sMontyMoleKillStreak < 2147483647)
+        if (sMontyMoleKillStreak < 8)
             sMontyMoleKillStreak++;
 
         sMontyMoleLastKilledPosX = o->oPosX;

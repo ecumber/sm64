@@ -790,6 +790,8 @@ void bowser_act_quick_jump(void) {
         }
     // Lands then quickly returns to default action
     } else if (o->oSubAction == 1) {
+        // FIXED ! bowser not returning after jumping off
+        bowser_reset_fallen_off_stage();
         if (bowser_land()) {
             o->oSubAction++;
         }

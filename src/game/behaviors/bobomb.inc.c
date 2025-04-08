@@ -188,7 +188,7 @@ void bobomb_held_loop(void) {
 
     o->oBobombFuseLit = 1;
     if (o->oBobombFuseTimer > 150) {
-        //! Although the Bob-omb's action is set to explode when the fuse timer expires,
+        // FIXED ! Although the Bob-omb's action is set to explode when the fuse timer expires,
         //  bobomb_act_explode() will not execute until the bob-omb's held state changes.
         //  This allows the Bob-omb to be regrabbed indefinitely.
         gMarioObject->oInteractStatus |= INT_STATUS_MARIO_DROP_OBJECT;
@@ -412,11 +412,11 @@ void bobomb_buddy_act_turn_to_talk(void) {
 
     o->oMoveAngleYaw = approach_s16_symmetric(o->oMoveAngleYaw, o->oAngleToMario, 0x1000);
 
+    // FIXED ! sound repeating while talking to npc
     if ((s16) o->oMoveAngleYaw == (s16) o->oAngleToMario) {
+        cur_obj_play_sound_2(SOUND_ACTION_READ_SIGN);
         o->oAction = BOBOMB_BUDDY_ACT_TALK;
     }
-
-    cur_obj_play_sound_2(SOUND_ACTION_READ_SIGN);
 }
 
 void bobomb_buddy_actions(void) {

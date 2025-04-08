@@ -74,8 +74,8 @@ void bhv_mr_i_body_loop(void) {
             o->parentObj->oMrIUnk110 = 0;
         }
     }
-
-    if (o->parentObj->activeFlags == ACTIVE_FLAG_DEACTIVATED) {
+    // FIXED ! pupil adoption
+    if ((o->parentObj->behavior != bhvMrI) || (o->parentObj->activeFlags == ACTIVE_FLAG_DEACTIVATED)) {
         obj_mark_for_deletion(o);
     }
 }
