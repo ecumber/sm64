@@ -45,7 +45,7 @@ DEFINE_LEVEL("WHOMPS FORTRSS",       LEVEL_WF,               COURSE_WF,       wf
 DEFINE_LEVEL("ENDING",         LEVEL_ENDING,           COURSE_CAKE_END, ending,           generic,  20000,    0x00, 0x00, 0x00, _,         _)
 DEFINE_LEVEL("COURTYARD",        LEVEL_CASTLE_COURTYARD, COURSE_NONE,     castle_courtyard, outside,  20000,    0x08, 0x08, 0x08, _,         _)
 DEFINE_LEVEL("P SECRET SLIDE", LEVEL_PSS,              COURSE_PSS,      pss,              mountain, 20000,    0x28, 0x28, 0x28, _,         _)
-DEFINE_LEVEL("IN THE FALL",    LEVEL_COTMC,            COURSE_COTMC,    cotmc,            cave,     18000,    0x28, 0x28, 0x28, _,         sCamCotMC)
+DEFINE_LEVEL("COTMC",    LEVEL_COTMC,            COURSE_COTMC,    cotmc,            cave,     18000,    0x28, 0x28, 0x28, _,         sCamCotMC)
 DEFINE_LEVEL("TOWER WING CAP", LEVEL_TOTWC,            COURSE_TOTWC,    totwc,            sky,      20000,    0x20, 0x20, 0x20, _,         _)
 DEFINE_LEVEL("BOWSER 1",         LEVEL_BOWSER_1,         COURSE_BITDW,    bowser_1,         generic,  VAL_DIFF, 0x40, 0x40, 0x40, _,         _)
 DEFINE_LEVEL("WNGMARIO RNBOW",  LEVEL_WMOTR,            COURSE_WMOTR,    wmotr,            generic,  20000,    0x28, 0x28, 0x28, _,         _)
