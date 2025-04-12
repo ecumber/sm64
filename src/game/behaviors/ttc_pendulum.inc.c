@@ -31,6 +31,12 @@ void bhv_ttc_pendulum_init(void) {
  */
 void bhv_ttc_pendulum_update(void) {
     f32 nextChangeInAngleVel;
+
+    #ifdef ECUMBER_DEBUG
+    if (gDebugInfo[5][0] != 0)
+        o->oTTCPendulumAngleAccel = gDebugInfo[5][0];
+    #endif
+
     if (gTTCSpeedSetting != TTC_SPEED_STOPPED) {
         UNUSED f32 startVel = o->oTTCPendulumAngleVel;
 
@@ -45,20 +51,39 @@ void bhv_ttc_pendulum_update(void) {
         if (o->oTTCPendulumDelay != 0) {
             o->oTTCPendulumDelay--;
         } else {
+            //FIXED ! ttc pendulum speed manipulation
+            // this condition shouldn't happen under normal circumstances, so it will only happen if the pendulum was manipulated
+            // if the pendulum is within this range (it won't hit angle 0) set it to angle 0 so it will start decelerating
+            if ((o->oTTCPendulumAngle <= 12.0f) && (o->oTTCPendulumAngle >= -12.0f))
+            {
+                o->oTTCPendulumAngle = 0.0f;
+            }
+            // highest angles the pendulum can reach (that i've checked) rounded to the next multiple of both 13 and 42
+            if (o->oTTCPendulumAngle > 7644.0f)
+            {
+                o->oTTCPendulumAngle = 7644.0f;
+            }
+
+            if (o->oTTCPendulumAngle < -7644.0f)
+            {
+                o->oTTCPendulumAngle = -7644.0f;
+            }
             // Accelerate in the direction that moves angle to zero
             if (o->oTTCPendulumAngle * o->oTTCPendulumAccelDir > 0.0f) {
                 o->oTTCPendulumAccelDir = -o->oTTCPendulumAccelDir;
             }
             nextChangeInAngleVel = o->oTTCPendulumAngleAccel * o->oTTCPendulumAccelDir;
-            //FIXED ! ttc pendulum speed manipulation
-            // 1092 is divisible by both 13 and 42 and is above the normal angle velocity
+
+            #ifdef OLD_PENDULUM_SPEED_FIX
+            //1092 is divisible by both 13 and 42 and is above the normal angle velocity
             if ( (o->oTTCPendulumAngleVel + nextChangeInAngleVel) > 1092.0f )
                 nextChangeInAngleVel = 1092.0f;
+            #endif
             o->oTTCPendulumAngleVel += nextChangeInAngleVel;
 
             // Ignoring floating point imprecision, angle vel should always be
             // a multiple of angle accel, and so it will eventually reach zero
-            // TODO ! If the pendulum is moving fast enough, the vel could fail to
+            // FIXED ! If the pendulum is moving fast enough, the vel could fail to
             //  be a multiple of angle accel, and so the pendulum would continue
             //  oscillating forever
             if (o->oTTCPendulumAngleVel == 0.0f) {

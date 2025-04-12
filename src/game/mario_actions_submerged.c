@@ -176,6 +176,17 @@ static u32 perform_water_step(struct MarioState *m) {
     if (m->action & ACT_FLAG_SWIMMING) {
         apply_water_current(m, step);
     }
+    // FIXED ! chuckya holding underwater
+    if (m->heldObj != NULL)
+    {
+        if (m->heldObj->oInteractionSubtype == INT_SUBTYPE_GRABS_MARIO)
+        {
+            // throwing the object is better than dropping because it puts it further in front of mario
+            // so it doesn't push him back, potentially clipping him into a wall
+            mario_throw_held_object(m);
+            set_mario_action(m, ACT_WATER_IDLE, 0);
+        }
+    }
 
     nextPos[0] = m->pos[0] + step[0];
     nextPos[1] = m->pos[1] + step[1];

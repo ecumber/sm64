@@ -382,8 +382,8 @@ void update_shell_speed(struct MarioState *m) {
     if (m->forwardVel > 64.0f) {
         m->forwardVel = 64.0f;
     }
-    if (m->forwardVel < -64.0f) {
-        m->forwardVel = -64.0f;
+    if (m->forwardVel < -16.0f) {
+        m->forwardVel = -16.0f;
     }
 
     m->faceAngle[1] =
@@ -540,7 +540,7 @@ void anim_and_audio_for_walk(struct MarioState *m) {
                     if (val04 > 8.0f) {
                         m->actionTimer = 2;
                     } else {
-                        //FIXED ! (Speed Crash) If Mario's speed is more than 2^17.
+                        // FIXED ! (Speed Crash) If Mario's speed is more than 2^17.
                         if (val04 > 131071.0f)
                             val04 = 131071.0f;
                         if ((val14 = (s32)(val04 / 4.0f * 0x10000)) < 0x1000) {
@@ -1091,6 +1091,7 @@ s32 act_braking(struct MarioState *m) {
 s32 act_decelerating(struct MarioState *m) {
     s32 val0C;
     s16 slopeClass = mario_get_floor_class(m);
+    f32 sanitizedSpeed;
 
     if (!(m->input & INPUT_FIRST_PERSON)) {
         if (should_begin_sliding(m)) {
@@ -1138,8 +1139,11 @@ s32 act_decelerating(struct MarioState *m) {
         adjust_sound_for_speed(m);
         m->particleFlags |= PARTICLE_DUST;
     } else {
-        // (Speed Crash) Crashes if speed exceeds 2^17.
-        if ((val0C = (s32)(m->forwardVel / 4.0f * 0x10000)) < 0x1000) {
+        // FIXED ! (Speed Crash) Crashes if speed exceeds 2^17.
+        sanitizedSpeed = m->forwardVel;
+        if (sanitizedSpeed > 131071.0f)
+            sanitizedSpeed = 131071.0f;
+        if ((val0C = (s32)(sanitizedSpeed / 4.0f * 0x10000)) < 0x1000) {
             val0C = 0x1000;
         }
 
