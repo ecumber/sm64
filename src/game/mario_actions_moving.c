@@ -1041,12 +1041,14 @@ s32 act_finish_turning_around(struct MarioState *m) {
     update_walking_speed(m);
     set_mario_animation(m, MARIO_ANIM_TURNING_PART2);
 
-    if (perform_ground_step(m) == GROUND_STEP_LEFT_GROUND) {
-        set_mario_action(m, ACT_FREEFALL, 0);
-    }
+    // FIXED ! turning around into air puts you in walking action midair
 
     if (is_anim_at_end(m)) {
         set_mario_action(m, ACT_WALKING, 0);
+    }
+
+    if (perform_ground_step(m) == GROUND_STEP_LEFT_GROUND) {
+        set_mario_action(m, ACT_FREEFALL, 0);
     }
 
     m->marioObj->header.gfx.angle[1] += 0x8000;
