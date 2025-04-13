@@ -265,6 +265,25 @@ void print_marioinfo(void) {
     print_debug_top_down_mapinfo("HURT %d", gMarioState->hurtCounter);
     print_debug_top_down_mapinfo("CAPTM %d", gMarioState->capTimer);
 }
+
+void print_triinfo(void) {
+    print_debug_top_down_normal("triinfo", 0);
+    if (gMarioState->floor != NULL)
+    {
+        print_debug_top_down_mapinfo("FLR %d", gMarioState->floor);
+        print_debug_top_down_mapinfo("FLRTYPE %d", gMarioState->floor->type);
+    }
+    if (gMarioState->wall != NULL)
+    {
+        print_debug_top_down_mapinfo("WALL %d", gMarioState->wall);
+        print_debug_top_down_mapinfo("WALLTYPE %d", gMarioState->wall->type);
+    }
+    if (gMarioState->ceil != NULL)
+    {
+        print_debug_top_down_mapinfo("CEILTYPE %d", gMarioState->ceil->type);
+        print_debug_top_down_mapinfo("CEIL %d", gMarioState->ceil);
+    }
+}
 #endif
 void update_debug_dpadmask(void) {
     s32 dPadMask = gPlayer1Controller->buttonDown & (U_JPAD | D_JPAD | L_JPAD | R_JPAD);
@@ -472,8 +491,12 @@ void try_print_debug_mario_object_info(void) {
                 print_enemyinfo();
                 break;
 #ifdef ECUMBER_DEBUG   
+            case DEBUG_PAGE_TRIINFO:
+                print_triinfo();
+                break;
             case DEBUG_PAGE_MARIOINFO:
                 print_marioinfo();
+                break;
 #endif
             default:
                 break;

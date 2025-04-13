@@ -11,7 +11,8 @@ enum DebugPage {
     DEBUG_PAGE_EFFECTINFO,       // 4: effectinfo
     DEBUG_PAGE_ENEMYINFO         // 5: enemyinfo   
     #ifdef ECUMBER_DEBUG      
-    ,DEBUG_PAGE_MARIOINFO         // 6: marioinfo
+    ,DEBUG_PAGE_TRIINFO,        // 7: triangleinfo
+    DEBUG_PAGE_MARIOINFO         // 7: marioinfo
     #endif
 };
 
